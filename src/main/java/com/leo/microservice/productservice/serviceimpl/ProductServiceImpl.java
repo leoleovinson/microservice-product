@@ -1,5 +1,6 @@
 package com.leo.microservice.productservice.serviceimpl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,8 +36,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void addProduct(ProductDto productdto) {
-		productRepository.save(convertProductDtoToProductEntity(productdto));
+	public ProductDto addProduct(ProductDto productdto) {
+		Product product = convertProductDtoToProductEntity(productdto);
+		product.setDateCreated(ProductUtilities.getDateAndTime());
+		productRepository.save(product);
+		return convertProductEntityToProductDto(productRepository.save(product));
 	}
 
 	private Product convertProductDtoToProductEntity(ProductDto productdto) {
@@ -70,9 +74,9 @@ public class ProductServiceImpl implements ProductService {
 		if (findProductById(id) != null) {
 			Product product = findProductById(id);
 			
-			if(productdto.getProductName() != null) product.setProductName(productdto.getProductName());
-			if(productdto.getProductDescription() != null) product.setProductDescription(productdto.getProductDescription());
-			product.setPrice(productdto.getPrice());
+			if(!"".equals(productdto.getProductName())) product.setProductName(productdto.getProductName());
+			if(!"".equals(productdto.getProductDescription())) product.setProductDescription(productdto.getProductDescription());
+			if(productdto.getPrice() != 0) product.setPrice(productdto.getPrice());
 			product.setDateCreated(ProductUtilities.getDateAndTime());
 			productdto.setProductId(id);
 			updateProductDetails(product);

@@ -23,7 +23,7 @@ import com.leo.microservice.productservice.service.ProductService;
 import com.leo.microservice.productservice.serviceimpl.ProductServiceImpl;
 
 @RestController
-//@RequestMapping("/product")
+@RequestMapping("/product")
 public class ProductController {
 	
 	@Autowired
@@ -33,53 +33,32 @@ public class ProductController {
 	ProductLogService productLogService;
 	
 	
-	@GetMapping("/products")
+	@GetMapping("/all")
 	public ResponseEntity<List<ProductDto>> getAllProducts() {
-		productLogService.sendLog("Fetching all products");
 		return new ResponseEntity<>(productService.getAllProductsDto(),HttpStatus.OK); 
 	}
 	
-	@PostMapping("/product")
+	@PostMapping("/new")
 	public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productdto) {
-		
 		productService.addProduct(productdto);
-		productLogService.sendLog("Adding a product " +productdto);
-		
 		return new ResponseEntity<>("Product Added ",HttpStatus.CREATED); 
 	}
 	
-	@PutMapping("/product/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductDto productdto){
-		
 		ProductDto productDto = productService.updateProduct(id, productdto);
-		productLogService.sendLog("Updating product with id: " +id);
-		
 		if (productDto == null) {
-			
-//			productLogService.sendLog("Product does not exist");
-//			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			throw new ResourceNotFoundException("Product not found with id: " +id);
 		}
-		
-		productLogService.sendLog("Updated product: " +productService.getProduct(id));
 		return new ResponseEntity<>(productService.getProduct(id), HttpStatus.FOUND); 
 	}
 	
-	@GetMapping("/product/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Long id){
-		
-		ProductDto productDto = productService.getProduct(id);
-		productLogService.sendLog("Fetching product with id: " +id);
-		
+		ProductDto productDto = productService.getProduct(id);		
 		if (productService.findProductById(id) == null) {
-			
-//			productLogService.sendLog("Product does not exist");
-//			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			throw new ResourceNotFoundException("Product not found with id: " +id);
-			
+			throw new ResourceNotFoundException("Product not found with id: " +id);	
 		}
-		
-		productLogService.sendLog("Product: " +productService.getProduct(id));
 		return new ResponseEntity<>(productDto, HttpStatus.FOUND); 
 	}
 

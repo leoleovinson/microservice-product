@@ -15,7 +15,6 @@ public class ProductLogServiceImpl implements ProductLogService {
 	
 	@Override
 	public void sendLog(String message) {
-		System.out.println("testing this line of code" +message);
 		kafkaTemplate.send("logs-topic", message);
 	}
 

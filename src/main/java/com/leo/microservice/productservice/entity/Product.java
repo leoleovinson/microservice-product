@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,8 @@ public class Product {
 	@Id
 	@GeneratedValue
 	private Long productId;
+	
+
 	private String productName;
 	private String productDescription;
 	private double price;

@@ -9,7 +9,7 @@ public interface ProductService {
 	
 	List<Product> getAllProducts();
 	
-	void addProduct(ProductDto productdto);
+	ProductDto addProduct(ProductDto productdto);
 	
 	public List<ProductDto> getAllProductsDto();
 	
